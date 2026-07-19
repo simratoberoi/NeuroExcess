@@ -17,6 +17,15 @@ class Settings(BaseSettings):
     # Multiple: OCR_LANGUAGE=eng,fr  (comma-separated, handled in service)
     OCR_LANGUAGE: str = "eng"
 
+    # ── Auth / MongoDB ─────────────────────────────────────────
+    MONGODB_URI: str 
+    MONGODB_DB_NAME: str = "neuroexcess"
+
+     # ── Auth / JWT ─────────────────────────────────────────────
+    JWT_SECRET_KEY: str = "CHANGE_ME_IN_PRODUCTION"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 60 * 24 * 7  # 7 days
+
     class Config:
         env_file = ".env"
         extra = "ignore"
