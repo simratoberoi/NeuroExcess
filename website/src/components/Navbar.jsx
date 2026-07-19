@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { NavLink, Link } from 'react-router-dom'
 import { useTheme } from '../theme/ThemeContext.jsx'
+import { useAuth } from '../Contexts/AuthContext.jsx'
 import { IconSun, IconMoon, IconMenu, IconClose, IconPuzzle } from './Icons.jsx'
+import AuthModal from './Auth.jsx'
 
 const links = [
   { to: '/features', label: 'Features' },
@@ -12,9 +14,24 @@ const links = [
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme()
+  const { isAuthenticated, user, logout } = useAuth()
   const [open, setOpen] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
+  const [authMode, setAuthMode] = useState('login')
+
+  function openAuth(mode) {
+    setAuthMode(mode)
+    setAuthModalOpen(true)
+    setOpen(false) // close mobile menu if it was open
+  }
+
+  function handleLogout() {
+    logout()
+    setOpen(false)
+  }
 
   return (
+    <>
     <header className="nav">
       <div className="container nav-inner">
         <Link to="/" className="nav-brand" onClick={() => setOpen(false)}>
@@ -45,9 +62,24 @@ export default function Navbar() {
           >
             {theme === 'light' ? <IconMoon width={18} height={18} /> : <IconSun width={18} height={18} />}
           </button>
+
+          {isAuthenticated ? (
+            <div className="nav-user">
+              <span className="nav-user-name">{user?.name || user?.username}</span>
+              <button type="button" className="btn btn-ghost nav-auth-btn" onClick={handleLogout}>
+                Log out
+              </button>
+            </div>
+          ) : (
+            <button type="button" className="btn btn-ghost nav-auth-btn" onClick={() => openAuth('login')}>
+              Log in
+            </button>
+          )}
+
           <Link to="/setup" className="btn btn-primary nav-cta">
             Add to Chrome
           </Link>
+
           <button
             type="button"
             className="nav-burger"
@@ -68,6 +100,22 @@ export default function Navbar() {
                 {l.label}
               </NavLink>
             ))}
+
+            {isAuthenticated ? (
+              <div className="nav-mobile-auth">
+                <span className="nav-mobile-user">{user?.name || user?.username}</span>
+                <button type="button" className="btn btn-ghost btn-block" onClick={handleLogout}>
+                  Log out
+                </button>
+              </div>
+            ) : (
+              <div className="nav-mobile-auth">
+                <button type="button" className="btn btn-ghost btn-block" onClick={() => openAuth('login')}>
+                  Log in
+                </button>
+              </div>
+            )}
+
             <Link to="/setup" className="btn btn-primary btn-block" onClick={() => setOpen(false)}>
               Add to Chrome — it's free
             </Link>
@@ -150,6 +198,37 @@ export default function Navbar() {
         }
         .theme-toggle:hover { border-color: var(--primary); color: var(--primary); }
 
+        .nav-auth-btn {
+          white-space: nowrap;
+          display: inline-flex;
+          align-items: center;
+          height: 40px;
+        }
+        .btn-ghost {
+          background: transparent;
+          border: 1px solid var(--border-strong);
+          color: var(--text);
+        }
+        .btn-ghost:hover {
+          border-color: var(--primary);
+          color: var(--primary);
+        }
+
+        .nav-user {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+        }
+        .nav-user-name {
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--text);
+          max-width: 140px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
         .nav-cta { display: inline-flex; }
         .nav-burger {
           display: none;
@@ -177,13 +256,35 @@ export default function Navbar() {
           color: var(--text);
           border-bottom: 1px solid var(--border);
         }
+        .nav-mobile-auth {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          padding: 16px 0;
+          border-bottom: 1px solid var(--border);
+        }
+        .nav-mobile-user {
+          font-size: 15px;
+          font-weight: 500;
+          color: var(--text);
+          padding: 0 4px;
+        }
 
         @media (max-width: 900px) {
           .nav-links { display: none; }
           .nav-cta { display: none; }
+          .nav-auth-btn { display: none; }
+          .nav-user { display: none; }
           .nav-burger { display: inline-flex; }
         }
       `}</style>
     </header>
+
+    <AuthModal
+      isOpen={authModalOpen}
+      onClose={() => setAuthModalOpen(false)}
+      initialMode={authMode}
+    />
+    </>
   )
 }
