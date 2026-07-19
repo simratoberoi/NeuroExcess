@@ -7,14 +7,39 @@ const topics = ['General question', 'Bug report', 'Accessibility feedback', 'Ear
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', topic: topics[0], message: '' })
   const [sent, setSent] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   function update(field) {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }))
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    setSent(true)
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8080'}/api/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(form),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.message || data.errors?.join(', ') || 'Failed to send message.')
+      }
+
+      setSent(true)
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -38,6 +63,12 @@ export default function Contact() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="contact-form">
+                {error && (
+                  <div className="form-error">
+                    {error}
+                  </div>
+                )}
+                
                 <div className="form-row">
                   <div className="form-field">
                     <label htmlFor="name">Name</label>
@@ -70,8 +101,8 @@ export default function Contact() {
                   />
                 </div>
 
-                <button type="submit" className="btn btn-primary btn-lg btn-block">
-                  Send message
+                <button type="submit" disabled={loading} className="btn btn-primary btn-lg btn-block">
+                  {loading ? 'Sending...' : 'Send message'}
                 </button>
               </form>
             )}
@@ -118,6 +149,15 @@ export default function Contact() {
         }
         .contact-form-wrap { padding: 36px; }
         .contact-form { display: flex; flex-direction: column; gap: 20px; }
+        .form-error {
+          padding: 12px 16px;
+          border-radius: var(--radius-sm);
+          background: rgba(239, 68, 68, 0.15);
+          border: 1px solid rgba(239, 68, 68, 0.25);
+          color: #ef4444;
+          font-size: 14px;
+          line-height: 1.4;
+        }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         .form-field { display: flex; flex-direction: column; gap: 8px; }
         .form-field label { font-size: 14px; font-weight: 500; color: var(--text); }
