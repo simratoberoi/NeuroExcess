@@ -10,6 +10,10 @@
     "package": "plasmo package"
   },
   "dependencies": {
+    "@plasmohq/storage": "^1.15.0",
+    "color2k": "^2.0.4",
+    "hyphenation.en-us": "^0.2.1",
+    "hypher": "^0.2.5",
     "plasmo": "0.90.5",
     "react": "18.2.0",
     "react-dom": "18.2.0"
@@ -28,7 +32,9 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://*/*",
+      "http://*/*",
+      "file:///*"
     ]
   }
 }
