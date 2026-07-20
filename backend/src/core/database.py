@@ -22,3 +22,6 @@ def ensure_indexes() -> None:
     """
     _db.users.create_index("email", unique=True)
     _db.users.create_index("username", unique=True)
+    # contacts collection indexes
+    _db.contacts.create_index("email")
+    _db.contacts.create_index("created_at")
