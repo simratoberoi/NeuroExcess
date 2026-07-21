@@ -1,4 +1,5 @@
 import { createContext, useState, useContext, useEffect } from 'react';
+import { notifyExtensionSignedIn, notifyExtensionSignedOut } from '../utils/extensionBridge';
 
 const AuthContext = createContext(null);
 
@@ -44,6 +45,9 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             setIsAuthenticated(true);
             setToken(storedToken);
+            // Extension may already be installed with no cached session —
+            // sync it here too, not just on fresh login/signup.
+            notifyExtensionSignedIn(userData, storedToken);
           } else {
             localStorage.removeItem(TOKEN_KEY);
             setToken(null);
@@ -81,6 +85,7 @@ export const AuthProvider = ({ children }) => {
       setToken(data.access_token);
       setUser(data.user);
       setIsAuthenticated(true);
+      notifyExtensionSignedIn(data.user, data.access_token);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -116,6 +121,7 @@ export const AuthProvider = ({ children }) => {
       setToken(data.access_token);
       setUser(data.user);
       setIsAuthenticated(true);
+      notifyExtensionSignedIn(data.user, data.access_token);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -127,6 +133,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
+    notifyExtensionSignedOut();
   };
 
   const value = {

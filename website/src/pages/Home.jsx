@@ -10,6 +10,7 @@ import { useAuth } from "../Contexts/AuthContext.jsx";
 import AuthModal from "../components/Auth.jsx";
 import darkImg from "../assets/dark-img.png";
 import { useTheme } from "../theme/ThemeContext.jsx";
+import TailoredFeaturesPanel from '../components/TailoredFeaturesPanel.jsx';
 
 const groups = [
   { icon: IconEye, title: 'Blind & low vision', text: 'AI image labeling, OCR, and ARIA fixes make pages make sense out loud.' },
@@ -84,6 +85,8 @@ export default function Home() {
               >
                 Add to Chrome — free <IconArrowRight width={18} height={18} />
               </Link>
+
+              
               <Link to="/features" className="btn btn-secondary btn-lg">
                 See how it works
               </Link>
@@ -99,6 +102,13 @@ export default function Home() {
           <div className="hero-visual">
             <BeforeAfterDemo />
           </div>
+        </div>
+      </section>
+
+       {/* ============ TAILORED FOR YOU (only shows if signed in) ============ */}
+      <section className="section">
+        <div className="container">
+          <TailoredFeaturesPanel />
         </div>
       </section>
 
