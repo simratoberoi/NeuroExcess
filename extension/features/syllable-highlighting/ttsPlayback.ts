@@ -20,7 +20,6 @@ interface CoreSpeakOptions {
   onEnd: () => void
 }
 
-let activeUtterance: SpeechSynthesisUtterance | null = null
 const MAX_CHUNK_CHARS = 200
 
 /**
@@ -94,30 +93,6 @@ export function createTtsController(text: string, options: CoreSpeakOptions): Tt
       options.onBoundary?.(offsets[index] + event.charIndex, event.charLength)
     })
 
-  const finish = () => {
-    if (activeUtterance === utterance) {
-      activeUtterance = null
-    }
-    options.onEnd()
-  }
-  utterance.addEventListener("end", finish)
-  utterance.addEventListener("error", finish)
-
-  return {
-    play: () => {
-      activeUtterance = utterance
-      speechSynthesis.speak(utterance)
-    },
-    pause: () => {
-      speechSynthesis.pause()
-    },
-    resume: () => {
-      speechSynthesis.resume()
-    },
-    stop: () => {
-      if (activeUtterance === utterance) {
-        activeUtterance = null
-      }
     const next = () => speakChunk(index + 1)
     utterance.addEventListener("end", next)
     utterance.addEventListener("error", next)

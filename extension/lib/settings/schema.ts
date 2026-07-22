@@ -1,4 +1,8 @@
-export type ColorBlindMode = "none" | "protanopia" | "deuteranopia" | "tritanopia"
+export type ColorBlindMode =
+  | "none"
+  | "protanopia"
+  | "deuteranopia"
+  | "tritanopia"
 
 export type ContrastLevel = "AA" | "AAA"
 

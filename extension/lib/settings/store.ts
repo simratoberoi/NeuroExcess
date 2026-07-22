@@ -24,11 +24,16 @@ export async function setGlobalSettings(patch: SettingsPatch): Promise<void> {
   await globalStorage.set(GLOBAL_SETTINGS_KEY, next)
 }
 
-export async function getSiteOverride(hostname: string): Promise<SiteOverride | undefined> {
+export async function getSiteOverride(
+  hostname: string
+): Promise<SiteOverride | undefined> {
   return siteStorage.get<SiteOverride>(siteOverrideKey(hostname))
 }
 
-export async function setSiteOverride(hostname: string, patch: SiteOverride): Promise<void> {
+export async function setSiteOverride(
+  hostname: string,
+  patch: SiteOverride
+): Promise<void> {
   const current = (await getSiteOverride(hostname)) ?? {}
   const next = mergePartialOverrides(current, patch)
   await siteStorage.set(siteOverrideKey(hostname), next)
@@ -38,8 +43,13 @@ export async function clearSiteOverride(hostname: string): Promise<void> {
   await siteStorage.remove(siteOverrideKey(hostname))
 }
 
-export async function getEffectiveSettings(hostname: string): Promise<GlobalSettings> {
-  const [global, override] = await Promise.all([getGlobalSettings(), getSiteOverride(hostname)])
+export async function getEffectiveSettings(
+  hostname: string
+): Promise<GlobalSettings> {
+  const [global, override] = await Promise.all([
+    getGlobalSettings(),
+    getSiteOverride(hostname)
+  ])
   return mergeSettings(global, override)
 }
 
@@ -67,8 +77,12 @@ export function watchEffectiveSettings(
     })
   }
 
-  const globalWatchMap: StorageCallbackMap = { [GLOBAL_SETTINGS_KEY]: recompute }
-  const siteWatchMap: StorageCallbackMap = { [siteOverrideKey(hostname)]: recompute }
+  const globalWatchMap: StorageCallbackMap = {
+    [GLOBAL_SETTINGS_KEY]: recompute
+  }
+  const siteWatchMap: StorageCallbackMap = {
+    [siteOverrideKey(hostname)]: recompute
+  }
 
   globalStorage.watch(globalWatchMap)
   siteStorage.watch(siteWatchMap)

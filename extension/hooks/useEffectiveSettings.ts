@@ -3,7 +3,11 @@ import { useStorage } from "@plasmohq/storage/hook"
 import { DEFAULT_GLOBAL_SETTINGS } from "~lib/settings/defaults"
 import { siteOverrideKey } from "~lib/settings/hostname"
 import { mergePartialOverrides, mergeSettings } from "~lib/settings/merge"
-import type { GlobalSettings, SettingsPatch, SiteOverride } from "~lib/settings/schema"
+import type {
+  GlobalSettings,
+  SettingsPatch,
+  SiteOverride
+} from "~lib/settings/schema"
 import { globalStorage, siteStorage } from "~lib/settings/store"
 
 const GLOBAL_SETTINGS_KEY = "settings:global"
@@ -24,7 +28,9 @@ export interface UseEffectiveSettingsResult {
  * @plasmohq/storage's chrome.storage.onChanged wrapper (so edits made in another
  * extension context, e.g. the options page, are reflected here automatically).
  */
-export function useEffectiveSettings(hostname: string | undefined): UseEffectiveSettingsResult {
+export function useEffectiveSettings(
+  hostname: string | undefined
+): UseEffectiveSettingsResult {
   const [globalSettings, , globalMeta] = useStorage<GlobalSettings>(
     { key: GLOBAL_SETTINGS_KEY, instance: globalStorage },
     DEFAULT_GLOBAL_SETTINGS
@@ -45,7 +51,9 @@ export function useEffectiveSettings(hostname: string | undefined): UseEffective
 
   async function updateSiteOverride(patch: SiteOverride): Promise<void> {
     if (!hostname) return
-    await overrideMeta.setStoreValue(mergePartialOverrides(override ?? {}, patch))
+    await overrideMeta.setStoreValue(
+      mergePartialOverrides(override ?? {}, patch)
+    )
   }
 
   function clearSiteOverride(): void {

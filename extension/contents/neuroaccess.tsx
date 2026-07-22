@@ -8,12 +8,12 @@ import { globalModeController } from "~features/global-mode"
 import { GlobalModeSummaryOverlay } from "~features/global-mode/GlobalModeSummaryOverlay"
 import { RulerOverlay } from "~features/reading-ruler/RulerOverlay"
 import { skipLinksController } from "~features/skip-links"
-import { ReadingBarOverlay } from "~features/syllable-highlighting/ReadingBarOverlay"
-import { VoiceCommandsOverlay } from "~features/voice-commands/VoiceCommandsOverlay"
 import {
   StandaloneReaderWidget,
   type StandaloneReaderHandle
 } from "~features/syllable-highlighting/readerWidget"
+import { ReadingBarOverlay } from "~features/syllable-highlighting/ReadingBarOverlay"
+import { VoiceCommandsOverlay } from "~features/voice-commands/VoiceCommandsOverlay"
 import { DEFAULT_GLOBAL_SETTINGS } from "~lib/settings/defaults"
 import type { GlobalSettings } from "~lib/settings/schema"
 import { watchEffectiveSettings } from "~lib/settings/store"
@@ -43,7 +43,9 @@ function runFeature(name: string, fn: () => void): void {
 }
 
 export default function NeuroAccessRoot() {
-  const [settings, setSettings] = useState<GlobalSettings>(DEFAULT_GLOBAL_SETTINGS)
+  const [settings, setSettings] = useState<GlobalSettings>(
+    DEFAULT_GLOBAL_SETTINGS
+  )
   const standaloneReaderRef = useRef<StandaloneReaderHandle>(null)
   const runtime = globalThis.chrome.runtime
 
@@ -92,11 +94,20 @@ export default function NeuroAccessRoot() {
 
     return () => {
       runtime.onMessage.removeListener(onMessage)
-      window.removeEventListener("neuroaccess:local-read-selection", onLocalEvent)
+      window.removeEventListener(
+        "neuroaccess:local-read-selection",
+        onLocalEvent
+      )
       window.removeEventListener("neuroaccess:local-read-page", onLocalEvent)
       window.removeEventListener("neuroaccess:local-stop-reading", onLocalEvent)
-      window.removeEventListener("neuroaccess:local-pause-reading", onLocalEvent)
-      window.removeEventListener("neuroaccess:local-resume-reading", onLocalEvent)
+      window.removeEventListener(
+        "neuroaccess:local-pause-reading",
+        onLocalEvent
+      )
+      window.removeEventListener(
+        "neuroaccess:local-resume-reading",
+        onLocalEvent
+      )
     }
   }, [])
 
@@ -153,8 +164,14 @@ export default function NeuroAccessRoot() {
       <RulerOverlay settings={settings.readingRuler} />
       <ReadingBarOverlay settings={settings.syllableHighlighting} />
       <VoiceCommandsOverlay settings={settings.voiceCommands} />
-      <StandaloneReaderWidget ref={standaloneReaderRef} rate={settings.syllableHighlighting.speechRate} />
-      <GlobalModeSummaryOverlay enabled={settings.globalMode.enabled} hostname={location.hostname} />
+      <StandaloneReaderWidget
+        ref={standaloneReaderRef}
+        rate={settings.syllableHighlighting.speechRate}
+      />
+      <GlobalModeSummaryOverlay
+        enabled={settings.globalMode.enabled}
+        hostname={location.hostname}
+      />
     </>
   )
 }
