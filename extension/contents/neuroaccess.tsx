@@ -5,7 +5,9 @@ import { useEffect, useRef, useState } from "react"
 import { calmThemeController } from "~features/calm-theme"
 import { contrastFixerController } from "~features/contrast-fixer"
 import { globalModeController } from "~features/global-mode"
+import { AltTextReviewOverlay } from "~features/global-mode/AltTextReviewOverlay"
 import { GlobalModeSummaryOverlay } from "~features/global-mode/GlobalModeSummaryOverlay"
+import { ImageAiTooltipOverlay } from "~features/image-ai/ImageAiTooltipOverlay"
 import { RulerOverlay } from "~features/reading-ruler/RulerOverlay"
 import { skipLinksController } from "~features/skip-links"
 import {
@@ -172,6 +174,8 @@ export default function NeuroAccessRoot() {
         enabled={settings.globalMode.enabled}
         hostname={location.hostname}
       />
+      <AltTextReviewOverlay enabled={settings.globalMode.enabled} />
+      <ImageAiTooltipOverlay />
     </>
   )
 }

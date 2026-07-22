@@ -62,14 +62,40 @@ export function PopupApp() {
           <button
             type="button"
             onClick={() => triggerReader("neuroaccess:read-selection")}
-            className="flex-1 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50">
             Read selection
           </button>
           <button
             type="button"
             onClick={() => triggerReader("neuroaccess:read-page")}
-            className="flex-1 rounded-md border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50">
+            className="flex-1 rounded-md border border-gray-200 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50">
             Read page
+          </button>
+        </div>
+      </div>
+      <div className="mt-2 rounded-lg border border-sky-100 bg-sky-50/50 p-2.5">
+        <div className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-sky-800">
+          AI Image & PDF Vision
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <button
+            type="button"
+            onClick={() => {
+              const url = globalThis.chrome.runtime.getURL("tabs/describe.html")
+              void globalThis.chrome.tabs.create({ url })
+            }}
+            className="w-full rounded-md border border-sky-200 bg-white px-3 py-1.5 text-xs font-medium text-sky-900 hover:bg-sky-50 text-left flex items-center justify-between">
+            <span>🖼️ Open Image Descriptor / OCR Tool</span>
+            <span className="text-gray-400">↗</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              globalThis.chrome.runtime.sendMessage({ type: "neuroaccess:capture-screen-ocr" })
+            }}
+            className="w-full rounded-md border border-sky-200 bg-white px-3 py-1.5 text-xs font-medium text-sky-900 hover:bg-sky-50 text-left flex items-center justify-between">
+            <span>📄 Capture & Read PDF / Screen (OCR)</span>
+            <span className="text-sky-600 font-bold">▶</span>
           </button>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { scanAndCaptionImages } from "./aiImageScanner"
 import { AUTO_FIXABLE_CATEGORIES, type AuditIssue } from "./issueTypes"
 
 const ADDED_ALT_ATTR = "data-na-added-alt"
@@ -11,8 +12,13 @@ function humanizeFromSrc(src: string): string {
 }
 
 function fixImageAlt(img: HTMLImageElement): void {
-  img.setAttribute("alt", humanizeFromSrc(img.src))
-  img.setAttribute(ADDED_ALT_ATTR, "true")
+  // Set fallback immediate alt text while AI captioning is in progress
+  if (!img.hasAttribute("alt")) {
+    img.setAttribute("alt", humanizeFromSrc(img.src))
+    img.setAttribute(ADDED_ALT_ATTR, "true")
+  }
+  // Trigger backend AI captioning scan
+  void scanAndCaptionImages(img.parentElement || document.body)
 }
 
 function humanizeFromField(field: HTMLElement): string {

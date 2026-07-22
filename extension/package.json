@@ -32,7 +32,9 @@
   },
   "manifest": {
     "permissions": [
-      "contextMenus"
+      "contextMenus",
+      "activeTab",
+      "tabs"
     ],
     "host_permissions": [
       "https://*/*",
