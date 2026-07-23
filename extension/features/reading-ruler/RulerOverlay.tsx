@@ -16,6 +16,7 @@ export function RulerOverlay({ settings }: RulerOverlayProps) {
     settings.enabled
   )
 
+
   if (!settings.enabled || !visible) return null
 
   const panelStyle: CSSProperties = {

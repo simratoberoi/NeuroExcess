@@ -11,8 +11,8 @@ const ACCESSIBILITY_OPTIONS = [
   { value: 'adhd_focus_difficulties', label: 'ADHD / Focus Difficulties' },
   { value: 'autism_sensory_sensitivity', label: 'Autism / Sensory Sensitivity' },
   { value: 'motor_impairment', label: 'Motor Impairment' },
-  { value: 'temporary_impairment', label: 'Temporary Impairment' },
-  { value: 'deaf_hard_of_hearing', label: 'Deaf / Hard of Hearing' },
+  { value: 'temporary_impairment', label: 'Temporary Impairment' }
+
 ]
 
 const EMPTY_SIGNUP_FORM = {

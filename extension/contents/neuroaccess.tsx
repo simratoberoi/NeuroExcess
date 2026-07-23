@@ -48,6 +48,7 @@ export default function NeuroAccessRoot() {
   const [settings, setSettings] = useState<GlobalSettings>(
     DEFAULT_GLOBAL_SETTINGS
   )
+  
   const standaloneReaderRef = useRef<StandaloneReaderHandle>(null)
   const runtime = globalThis.chrome.runtime
 

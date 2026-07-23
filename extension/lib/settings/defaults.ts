@@ -30,7 +30,7 @@ export const DEFAULT_GLOBAL_SETTINGS: GlobalSettings = {
   // mouse users, so it carries none of the "surprising page repaint" risk
   // that justifies opt-in for the other features.
   skipLinks: {
-    enabled: true
+    enabled: false
   },
   voiceCommands: {
     enabled: false
